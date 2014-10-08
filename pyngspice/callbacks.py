@@ -3,6 +3,7 @@ Created on Oct 7, 2014
 
 @author: martin
 '''
+
 from ctypes import *
 from ngtypes import *
 import binascii
@@ -11,13 +12,13 @@ import binascii
 
 def SendChar(p_output, lib_id, p_request=0):
     ''' Sending output from stdout, stderr to caller. '''
-    print(cast(p_output, c_char_p).value)
+    print(cast(p_output, c_char_p).value.decode('ascii'))
 
     
 def SendStat(p_sim_stat, lib_id, p_request=0):
     ''' sending simulation status to caller, e.g. the string ’tran 34.5%’. '''
     
-    print(cast(p_sim_stat, c_char_p).value)
+    print(cast(p_sim_stat, c_char_p).value.decode('ascii'))
     
     
 def ControlledExit(exit_status, unloading, exit_upon_quit, lib_id, p_request=0):
@@ -36,15 +37,15 @@ def SendInitData(p_vecinfoall, lib_id, p_request=0):
     ''' send back initialization vector data. '''
     
     print("SendInitData:")    
-    print(p_vecinfoall.contents.name)
-    print(p_vecinfoall.contents.title)
-    print(p_vecinfoall.contents.date)
-    print(p_vecinfoall.contents.type)
+    print(p_vecinfoall.contents.name.decode('ascii'))
+    print(p_vecinfoall.contents.title.decode('ascii'))
+    print(p_vecinfoall.contents.date.decode('ascii'))
+    print(p_vecinfoall.contents.type.decode('ascii'))
     print(p_vecinfoall.contents.veccount)
     
     print("Available vectors:")
     for x in range(0, p_vecinfoall.contents.veccount):
-        print(p_vecinfoall.contents.vecs[x].contents.vecname)
+        print(p_vecinfoall.contents.vecs[x].contents.vecname.decode('ascii'))
 
     
     
