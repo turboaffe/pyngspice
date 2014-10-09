@@ -6,24 +6,31 @@ Created on Oct 7, 2014
 
 
 
-from ctypes import *
-from callbacks import *
-import sys
+import ctypes
+import callbacks
 import binascii
 
 
-def init(path_to_lib):
-    ''' standard library path on Linux: /usr/local/lib/libngspice.so '''
+class Ngspice():
     
-    ngspice_lib = cdll.LoadLibrary(path_to_lib)
-    
-    ngspice_lib.ngSpice_Init(pSendChar,pSendStat,pControlledExit,pSendData,pSendInitData,None,0)
-    
-    return ngspice_lib
 
+    def __init__(self, path_to_lib="/usr/local/lib/libngspice.so"):
+        
+        self.path_to_lib = path_to_lib
+        
+
+    def init(self):
+        ''' standard library path on Linux: /usr/local/lib/libngspice.so '''
+        
+        self.ngspice_lib = ctypes.cdll.LoadLibrary(self.path_to_lib)
+        
+        self.ngspice_lib.ngSpice_Init(callbacks.pSendChar,callbacks.pSendStat,
+                                      callbacks.pControlledExit,callbacks.pSendData,
+                                      callbacks.pSendInitData,None,0)
     
-def ng_command(command, ngspice_lib):
-    
-    ngspice_lib.ngSpice_Command(c_char_p(command.encode()))
+        
+    def ng_command(self, command):
+        
+        self.ngspice_lib.ngSpice_Command(ctypes.c_char_p(command.encode()))
     
     

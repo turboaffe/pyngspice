@@ -4,21 +4,21 @@ Created on Oct 7, 2014
 @author: martin
 '''
 
-from ctypes import *
-from ngtypes import *
+import ctypes
+import ngtypes
 import binascii
 
 ### callback functions ###
 
 def SendChar(p_output, lib_id, p_request=0):
     ''' Sending output from stdout, stderr to caller. '''
-    print(cast(p_output, c_char_p).value.decode('ascii'))
+    print(ctypes.cast(p_output, ctypes.c_char_p).value.decode('ascii'))
 
     
 def SendStat(p_sim_stat, lib_id, p_request=0):
     ''' sending simulation status to caller, e.g. the string ’tran 34.5%’. '''
     
-    print(cast(p_sim_stat, c_char_p).value.decode('ascii'))
+    print(ctypes.cast(p_sim_stat, ctypes.c_char_p).value.decode('ascii'))
     
     
 def ControlledExit(exit_status, unloading, exit_upon_quit, lib_id, p_request=0):
@@ -49,8 +49,8 @@ def SendInitData(p_vecinfoall, lib_id, p_request=0):
 
     
     
-pSendChar       = CFUNCTYPE(c_char_p, c_int, c_void_p)(SendChar)
-pSendStat       = CFUNCTYPE(c_char_p, c_int, c_void_p)(SendStat)
-pControlledExit = CFUNCTYPE(c_int, c_bool, c_bool, POINTER(c_int))(ControlledExit)
-pSendData       = CFUNCTYPE(None, POINTER(Vecvaluesall), c_int, c_int, c_void_p)(SendData)
-pSendInitData   = CFUNCTYPE(None, POINTER(Vecinfoall), c_int, c_void_p)(SendInitData) 
+pSendChar       = ctypes.CFUNCTYPE(ctypes.c_char_p, ctypes.c_int, ctypes.c_void_p)(SendChar)
+pSendStat       = ctypes.CFUNCTYPE(ctypes.c_char_p, ctypes.c_int, ctypes.c_void_p)(SendStat)
+pControlledExit = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_bool, ctypes.c_bool, ctypes.POINTER(ctypes.c_int))(ControlledExit)
+pSendData       = ctypes.CFUNCTYPE(None, ctypes.POINTER(ngtypes.Vecvaluesall), ctypes.c_int, ctypes.c_int, ctypes.c_void_p)(SendData)
+pSendInitData   = ctypes.CFUNCTYPE(None, ctypes.POINTER(ngtypes.Vecinfoall), ctypes.c_int, ctypes.c_void_p)(SendInitData) 
